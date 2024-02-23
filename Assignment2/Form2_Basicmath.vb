@@ -19,19 +19,28 @@ Public Class Form2
         Dim num2 As Integer
         Dim result As Integer
 
-        ' Convert the text from TextBoxes to integers
         If Integer.TryParse(TextBox1.Text, num1) AndAlso Integer.TryParse(TextBox2.Text, num2) Then
-            ' Check if the numbers are negative
             If num1 < 0 OrElse num2 < 0 Then
                 Label3.Text = "No negatives!!"
             Else
-                ' Perform the calculation if numbers are positive
-                result = num1 + num2
-                ' Display the original result
+                If buttonClicked = "Add" Then
+                    result = num1 + num2
+                ElseIf buttonClicked = "Subtract" Then
+                    result = num1 - num2
+                ElseIf buttonClicked = "Multiply" Then
+                    result = num1 * num2
+                ElseIf buttonClicked = "Divided" Then
+                    If num2 <> 0 Then
+                        result = num1 \ num2
+                    Else
+                        Label3.Text = "Cannot divide by zero!"
+                        Exit Sub
+                    End If
+                End If
+
                 DisplayOriginalResult(result)
             End If
         Else
-            ' Handle invalid input
             Label3.Text = "Invalid input!"
         End If
     End Sub
@@ -41,32 +50,57 @@ Public Class Form2
         Dim num2 As Integer
         Dim result As Integer
 
-        ' Convert the text from TextBoxes to integers
         If Integer.TryParse(TextBox1.Text, num1) AndAlso Integer.TryParse(TextBox2.Text, num2) Then
-            ' Check if the numbers are negative
             If num1 < 0 OrElse num2 < 0 Then
                 Label3.Text = "No negatives!!"
             Else
-                ' Perform the calculation if numbers are positive
-                result = num1 + num2
-                ' Displa using sticks
+                If buttonClicked = "Add" Then
+                    result = num1 + num2
+                    Label8.Text = "+"
+                ElseIf buttonClicked = "Subtract" Then
+                    result = num1 - num2
+                    Label8.Text = "-"
+                ElseIf buttonClicked = "Multiply" Then
+                    result = num1 * num2
+                    Label8.Text = "X"
+                ElseIf buttonClicked = "Divided" Then
+                    If num2 <> 0 Then
+                        result = num1 \ num2
+
+                    Else
+                        Label3.Text = "Cannot divide by zero!"
+                        Exit Sub
+                    End If
+                End If
+                Label9.Text = "Result ="
+
                 Displaynum1UsingSticks(num1)
                 Displaynum2UsingSticks(num2)
-                DisplayResultUsingSticks(result)
-                Label8.Text = "+"
-                Label9.Text = "Result ="
+                If buttonClicked = "Divided" Then
+                    DisplayDivisionUsingSticks(num1, num2, result)
+                    
+                ElseIf buttonClicked = "Multiply" Then
+                    DisplayMultiplicationUsingSticks(num1, num2, result)
+                Else
+                    DisplayResultUsingSticks(result)
+                    Exit Sub
+                End If
+                
+
+
             End If
         Else
-            ' Handle invalid input
             Label3.Text = "Invalid input!"
         End If
     End Sub
+
 
     Private Sub DisplayOriginalResult(ByVal result As Integer)
         Label3.Text = "Result = " & result
     End Sub
 
     Private Sub Displaynum1UsingSticks(ByVal num1 As Integer)
+
         ' Represent the result using sticks
         Dim stickResult As String = ""
         For i As Integer = 1 To num1
@@ -85,12 +119,66 @@ Public Class Form2
     End Sub
 
     Private Sub DisplayResultUsingSticks(ByVal result As Integer)
+
         ' Represent the result using sticks
         Dim stickResult As String = ""
         For i As Integer = 1 To result
             stickResult &= "| "
         Next
         Label7.Text = stickResult
+    End Sub
+
+    Private Sub DisplayDivisionUsingSticks(ByVal num1 As Integer, ByVal num2 As Integer, ByVal result As Integer)
+        If buttonClicked = "Divided" Then
+            Label6.Text = ""
+            ' Calculate the quotient and remainder
+            Dim quotient As Integer = num1 \ num2 ' Integer division for quotient
+            Dim remainder As Integer = num1 Mod num2 ' Remainder after division
+
+            ' Initialize the quotientSticks string
+            Dim quotientSticks As String = ""
+
+            ' Build the quotientSticks string representing the quotient as groups of num2 sticks with spaces in between
+            For i As Integer = 1 To quotient
+                For j As Integer = 1 To num2
+                    quotientSticks &= "| "
+                Next
+                quotientSticks &= "  " ' Add space between groups
+            Next
+
+            ' Display the quotient sticks
+            Label5.Text = quotientSticks.Trim()
+
+            ' Display the remainder
+            Dim remainderSticks As String = ""
+            For i As Integer = 1 To remainder
+                remainderSticks &= "| "
+            Next
+            If remainder = 0 Then
+                remainderSticks = "0"
+            End If
+            ' Display the remainder sticks along with the quotient information
+            Label7.Text = "Quotient = " & quotient & ", Remainder = " & remainder & vbCrLf & quotient & " Groups of " & num2 & " ,Remaining Sticks: " & remainderSticks
+        Else
+            ' Represent the result using sticks for other operations
+            Dim stickResult As String = ""
+            For i As Integer = 1 To result
+                stickResult &= "| "
+            Next
+            Label7.Text = stickResult
+        End If
+    End Sub
+    Private Sub DisplayMultiplicationUsingSticks(ByVal num1 As Integer, ByVal num2 As Integer, ByVal result As Integer)
+        If buttonClicked = "Multiply" Then
+            Dim multiplicationSticks As String = ""
+            For i As Integer = 1 To num2
+                For j As Integer = 1 To num1
+                    multiplicationSticks &= "| "
+                Next
+                multiplicationSticks &= "  " ' Add space between groups
+            Next
+            Label7.Text = multiplicationSticks.Trim()
+        End If
     End Sub
 
 
