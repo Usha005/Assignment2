@@ -8,11 +8,11 @@ Public Class Form1
     End Sub
 
     Private Sub btnOpenForm2_Button3_Click(ByVal sender As Object, ByVal e As EventArgs) Handles Button3.Click
-        OpenForm2("Multiplied with")
+        OpenForm2("Multiply")
     End Sub
 
     Private Sub btnOpenForm2_Button4_Click(ByVal sender As Object, ByVal e As EventArgs) Handles Button4.Click
-        OpenForm2("Divided By")
+        OpenForm2("Divided")
     End Sub
 
     Private Sub OpenForm2(ByVal buttonClicked As String)
