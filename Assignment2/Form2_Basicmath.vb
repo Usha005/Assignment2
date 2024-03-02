@@ -26,7 +26,12 @@ Public Class Form2
                 If buttonClicked = "Add" Then
                     result = num1 + num2
                 ElseIf buttonClicked = "Subtract" Then
-                    result = num1 - num2
+                    If num1 > num2 Then
+                        result = num1 - num2
+                    ElseIf num1 < num2 Then
+                        Label3.Text = "Number2 cannot be subtracted from Number1!!"
+                        Exit Sub
+                    End If
                 ElseIf buttonClicked = "Multiply" Then
                     result = num1 * num2
                 ElseIf buttonClicked = "Divided" Then
@@ -43,6 +48,8 @@ Public Class Form2
         Else
             Label3.Text = "Invalid input!"
         End If
+
+
     End Sub
 
     Private Sub btnDisplaySticks(ByVal sender As Object, ByVal e As EventArgs) Handles Button2.Click
@@ -58,11 +65,20 @@ Public Class Form2
                     result = num1 + num2
                     Label8.Text = "+"
                 ElseIf buttonClicked = "Subtract" Then
-                    result = num1 - num2
-                    Label8.Text = "-"
+                    If num1 > num2 Then
+                        result = num1 - num2
+                        Label8.Text = "-"
+                    ElseIf num1 < num2 Then
+                        Label3.Text = "Number2 cannot be subtracted from Number1!!"
+                        Exit Sub
+                    End If
                 ElseIf buttonClicked = "Multiply" Then
                     result = num1 * num2
-                    Label8.Text = "X"
+                    If result <> 0 Then
+                        Label8.Text = "X"
+                    Else
+                        Label8.Text = ""
+                    End If
                 ElseIf buttonClicked = "Divided" Then
                     If num2 <> 0 Then
                         result = num1 \ num2
@@ -72,20 +88,21 @@ Public Class Form2
                         Exit Sub
                     End If
                 End If
-                Label9.Text = "Result ="
+                Label9.Text = "Result :"
+
 
                 Displaynum1UsingSticks(num1)
                 Displaynum2UsingSticks(num2)
                 If buttonClicked = "Divided" Then
                     DisplayDivisionUsingSticks(num1, num2, result)
-                    
+
                 ElseIf buttonClicked = "Multiply" Then
                     DisplayMultiplicationUsingSticks(num1, num2, result)
                 Else
                     DisplayResultUsingSticks(result)
                     Exit Sub
                 End If
-                
+
 
 
             End If
@@ -93,6 +110,7 @@ Public Class Form2
             Label3.Text = "Invalid input!"
         End If
     End Sub
+
 
 
     Private Sub DisplayOriginalResult(ByVal result As Integer)
@@ -158,7 +176,7 @@ Public Class Form2
                 remainderSticks = "0"
             End If
             ' Display the remainder sticks along with the quotient information
-            Label7.Text = "Quotient = " & quotient & ", Remainder = " & remainder & vbCrLf & quotient & " Groups of " & num2 & " ,Remaining Sticks: " & remainderSticks
+            Label7.Text = "Quotient = " & quotient & ", Remainder = " & remainder & vbCrLf & quotient & " Groups of " & num2 & "sticks ,Remaining Sticks: " & remainderSticks
         Else
             ' Represent the result using sticks for other operations
             Dim stickResult As String = ""
@@ -171,15 +189,25 @@ Public Class Form2
     Private Sub DisplayMultiplicationUsingSticks(ByVal num1 As Integer, ByVal num2 As Integer, ByVal result As Integer)
         If buttonClicked = "Multiply" Then
             Dim multiplicationSticks As String = ""
-            For i As Integer = 1 To num2
-                For j As Integer = 1 To num1
-                    multiplicationSticks &= "| "
+            If num1 * num2 <> 0 Then
+                For i As Integer = 1 To num2
+                    For j As Integer = 1 To num1
+                        multiplicationSticks &= "| "
+                    Next
+                    If i < num2 Then ' Check if it's not the last iteration of the outer loop
+                        multiplicationSticks &= " + " ' Add plus sign after each row except the last one
+                    End If
                 Next
-                multiplicationSticks &= "  " ' Add space between groups
-            Next
-            Label7.Text = multiplicationSticks.Trim()
+                Label7.Text = multiplicationSticks.Trim()
+            Else
+                Label5.Text = "Any number multiplied with 0 gives 0!!"
+                Label7.Text = Nothing
+                Label9.Text = Nothing
+            End If
+            
         End If
     End Sub
+
 
 
     Private Sub btnclear(ByVal sender As Object, ByVal e As EventArgs) Handles Button3.Click
